@@ -1,0 +1,9 @@
+name: TryMC-CagePlugin
+version: 1.0-beta
+author: vFasteeQ
+website: completionStudio.pl
+main: pl.vfasteeq.cageplugin.MCPlugin
+
+commands:
+  cage:
+    description: Start a cage with two players...
