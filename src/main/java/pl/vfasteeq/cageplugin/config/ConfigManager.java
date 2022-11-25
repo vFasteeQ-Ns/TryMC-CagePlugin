@@ -1,10 +1,5 @@
 package pl.vfasteeq.cageplugin.config;
 
-/**
- * @author vFasteeQ
- * @since 25.11.2022
- */
-
 import org.bukkit.configuration.file.FileConfiguration;
 import pl.vfasteeq.cageplugin.MCPlugin;
 
@@ -13,6 +8,11 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+/**
+ * @author vFasteeQ
+ * @since 25.11.2022
+ */
 
 public class ConfigManager {
 
