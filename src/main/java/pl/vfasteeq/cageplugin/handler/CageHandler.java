@@ -9,15 +9,19 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.fernikq.core.CoreAPI;
 import pl.fernikq.core.user.User;
 import pl.vfasteeq.cageplugin.MCPlugin;
 import pl.vfasteeq.cageplugin.MCPluginAPI;
+import pl.vfasteeq.cageplugin.config.ConfigManager;
 import pl.vfasteeq.cageplugin.util.ChatUtil;
 import pl.vfasteeq.cageplugin.util.TitleUtil;
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public class CageHandler implements CommandExecutor, Listener {
     private boolean started;
     private boolean running;
     Set<Player> playerHashSet = new HashSet<>();
-    World world = Bukkit.getWorld("world");
+    World world = Bukkit.getWorld(ConfigManager.world);
     Player attacker;
     Player defender;
     Player killer;
@@ -50,7 +54,6 @@ public class CageHandler implements CommandExecutor, Listener {
         armorList.add(new ItemStack(Material.IRON_LEGGINGS, 1));
         armorList.add(new ItemStack(Material.IRON_CHESTPLATE, 1));
         armorList.add(new ItemStack(Material.IRON_HELMET, 1));
-        otherList.add(new ItemStack(Material.COOKED_CHICKEN, 32));
         otherList.add(new ItemStack(Material.STONE_SWORD, 1));
         otherList.add(new ItemStack(Material.GOLDEN_APPLE, 4));
         this.mcPlugin.getCommand("cage").setExecutor(this);
@@ -97,10 +100,11 @@ public class CageHandler implements CommandExecutor, Listener {
         ItemStack[] otherItemStack = (ItemStack[]) otherList.toArray((Object[]) new ItemStack[0]);
         player.getInventory().setContents(otherItemStack);
         if (attacker) {
-            player.teleport(new Location(world, -8.0D, 100.0D, 0.0D));
+            player.teleport(new Location(world, ConfigManager.coordinatesAttacker.get(0), ConfigManager.coordinatesAttacker.get(1), ConfigManager.coordinatesAttacker.get(2)));
         } else {
-            player.teleport(new Location(world, 8.0D, 100.0D, 0.0D));
+            player.teleport(new Location(world, ConfigManager.coordinatesDefender.get(0), ConfigManager.coordinatesDefender.get(1), ConfigManager.coordinatesDefender.get(2)));
         }
+
     }
 
     @EventHandler
@@ -111,7 +115,7 @@ public class CageHandler implements CommandExecutor, Listener {
                 killer = event.getEntity().getKiller();
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
                     if(killer.isOnline()) {
-                        killer.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
+                        killer.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
                         killer.getInventory().clear();
                         killer.getInventory().setArmorContents(null);
                         attacker = null;
@@ -152,10 +156,10 @@ public class CageHandler implements CommandExecutor, Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if(event.getPlayer() == attacker) {
-            event.getPlayer().teleport(new Location(world, 0.5D, 92.0D, 0.5D));
+            event.getPlayer().teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
             event.getPlayer().getInventory().clear();
             event.getPlayer().getInventory().setArmorContents(null);
-            defender.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
+            defender.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
             defender.getInventory().clear();
             defender.getInventory().setArmorContents(null);
             User user = CoreAPI.getPlugin().getUserManager().getUser(defender);
@@ -169,10 +173,10 @@ public class CageHandler implements CommandExecutor, Listener {
             }
         }
         if(event.getPlayer() == defender) {
-            event.getPlayer().teleport(new Location(world, 0.5D, 92.0D, 0.5D));
+            event.getPlayer().teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
             event.getPlayer().getInventory().clear();
             event.getPlayer().getInventory().setArmorContents(null);
-            attacker.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
+            attacker.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
             attacker.getInventory().clear();
             attacker.getInventory().setArmorContents(null);
             User user = CoreAPI.getPlugin().getUserManager().getUser(attacker);
@@ -192,6 +196,20 @@ public class CageHandler implements CommandExecutor, Listener {
         if(event.getPlayer() == attacker || event.getPlayer() == defender && running || !event.getPlayer().isOp()) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz uzywać komend podczas klatki."));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerMove(final PlayerMoveEvent event) {
+        if (event.getPlayer() == attacker || event.getPlayer() == defender && running) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+        if (event.getEntity() == attacker || event.getEntity() == defender && running) {
+            event.setFoodLevel(20);
         }
     }
 }
