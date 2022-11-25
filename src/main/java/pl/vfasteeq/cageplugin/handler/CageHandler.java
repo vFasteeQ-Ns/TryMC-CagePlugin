@@ -52,8 +52,9 @@ public class CageHandler implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if (!(commandSender instanceof Player && commandSender.hasPermission("cageplugin.start"))) {
+        if (!(commandSender instanceof Player && (commandSender.hasPermission("cageplugin.start") || commandSender.isOp()))) {
             commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz użyć tej komendy."));
+            return false;
         }
 
         if (args.length < 2) {
