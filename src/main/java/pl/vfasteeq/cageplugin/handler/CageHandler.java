@@ -144,6 +144,7 @@ public class CageHandler implements CommandExecutor, Listener {
             event.getPlayer().getInventory().clear();
             defender.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
             defender.getInventory().clear();
+            Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke walkowerem wygrał gracz&8: &e" + defender.getName()));
             attacker = null;
             defender = null;
             running = false;
@@ -153,6 +154,7 @@ public class CageHandler implements CommandExecutor, Listener {
             event.getPlayer().getInventory().clear();
             attacker.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
             attacker.getInventory().clear();
+            Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke walkowerem wygrał gracz&8: &e" + attacker.getName()));
             attacker = null;
             defender = null;
             running = false;
