@@ -18,7 +18,6 @@ import pl.vfasteeq.cageplugin.MCPlugin;
 import pl.vfasteeq.cageplugin.MCPluginAPI;
 import pl.vfasteeq.cageplugin.util.ChatUtil;
 import pl.vfasteeq.cageplugin.util.TitleUtil;
-
 import java.util.*;
 
 /**
@@ -75,6 +74,7 @@ public class CageHandler implements CommandExecutor, Listener {
         startCage(attacker, defender);
         setupPlayer(attacker, true);
         setupPlayer(defender, false);
+        Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz&8: &e" + attacker.getName() + " &f walczy z graczem&8: &e" + defender.getName()));
         return true;
     }
 
@@ -99,10 +99,12 @@ public class CageHandler implements CommandExecutor, Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         if(event.getEntity().getKiller() != null) {
             if(event.getEntity().getKiller() == attacker) {
-                Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> Klatki wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
+                Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
                     event.getEntity().getKiller().teleport(new Location(world, 0.5D, 92.0D, 0.5D));
                     event.getEntity().getKiller().getInventory().clear();
+                    attacker = null;
+                    defender = null;
                     running = false;
                 }, 100L);
             }
@@ -141,6 +143,8 @@ public class CageHandler implements CommandExecutor, Listener {
             event.getPlayer().getInventory().clear();
             defender.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
             defender.getInventory().clear();
+            attacker = null;
+            defender = null;
             running = false;
         }
         if(event.getPlayer() == defender) {
@@ -148,8 +152,11 @@ public class CageHandler implements CommandExecutor, Listener {
             event.getPlayer().getInventory().clear();
             attacker.teleport(new Location(world, 0.5D, 92.0D, 0.5D));
             attacker.getInventory().clear();
+            attacker = null;
+            defender = null;
             running = false;
         }
+
     }
 
     @EventHandler
@@ -157,10 +164,10 @@ public class CageHandler implements CommandExecutor, Listener {
         if(event.getPlayer() == attacker || event.getPlayer() == defender && running) {
             if(event.getMessage().equals("efekty") || event.getMessage().contains("ender") || event.getMessage().equals("kit")) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatUtil.fixColor("&4CAGE &8>> Nie możesz uzywać tych komend podczas klatek."));
+                event.getPlayer().sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz uzywać tych komend podczas klatek."));
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if(player.isOp()) {
-                        player.sendMessage(ChatUtil.fixColor("&4CAGE &8>> Gracz&8: &e" + event.getPlayer().getName() + " &fpróbował uzyć zakazanej komendy podczas klatek."));
+                        player.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz&8: &e" + event.getPlayer().getName() + " &fpróbował uzyć zakazanej komendy podczas klatek."));
                     }
                 }
             }
