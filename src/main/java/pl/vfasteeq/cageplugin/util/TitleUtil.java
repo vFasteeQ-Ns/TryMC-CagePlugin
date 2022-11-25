@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class TitleUtil {
     public static void sendTitleMessage(final Player player, String subTitle) {
         final CraftPlayer craftPlayer = (CraftPlayer) player;
-        craftPlayer.getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer.a("{\"text\": \"§cKLATKI\"}")));
+        craftPlayer.getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer.a("{\"text\": \"§4CAGE\"}")));
         craftPlayer.getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + ChatUtil.fixColor(subTitle) + "\"}")));
     }
 }

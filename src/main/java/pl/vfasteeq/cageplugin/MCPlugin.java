@@ -1,7 +1,7 @@
 package pl.vfasteeq.cageplugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.vfasteeq.cageplugin.command.CageCommand;
+import pl.vfasteeq.cageplugin.handler.CageHandler;
 
 /**
  * @author vFasteeQ
@@ -17,6 +17,6 @@ public class MCPlugin extends JavaPlugin {
     }
 
     private void registerListeners() {
-        new CageCommand(this);
+        new CageHandler(this);
     }
 }
