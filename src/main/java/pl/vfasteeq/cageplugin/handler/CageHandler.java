@@ -43,6 +43,8 @@ public class CageHandler implements CommandExecutor, Listener {
     Player attacker;
     Player defender;
     Player killer;
+
+
     public CageHandler(MCPlugin mcPlugin) {
         this.mcPlugin = mcPlugin;
         armorList.add(new ItemStack(Material.IRON_BOOTS, 1));
