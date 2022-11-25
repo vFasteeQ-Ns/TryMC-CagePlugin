@@ -62,12 +62,12 @@ public class CageHandler implements CommandExecutor, Listener {
         }
         attacker = Bukkit.getPlayer(args[0]);
         defender = Bukkit.getPlayer(args[1]);
-        if(args[0].equals(args[1])) {
-            commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz nie może walczyć ze samym sobą."));
-            return false;
-        }
         if (attacker == null || defender == null) {
             commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fJeden z graczy jest offline."));
+            return false;
+        }
+        if(args[0].equals(args[1])) {
+            commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz nie może walczyć ze samym sobą."));
             return false;
         }
         running = false;
