@@ -34,7 +34,7 @@ public class CageHandler implements CommandExecutor, Listener {
     private final MCPlugin mcPlugin;
     private final List<ItemStack> armorList = new ArrayList<>();
     private final List<ItemStack> otherList = new ArrayList<>();
-    public int time = 10;
+    public int time;
     public int taskId;
     private boolean started;
     private boolean running;
