@@ -26,8 +26,6 @@ public class ConfigManager {
         setValues();
     }
 
-    public static String world;
-
     public static String spawnLocation;
 
     public static String cageFirstPoint;
@@ -73,7 +71,6 @@ public class ConfigManager {
     }
 
     private void setValues(){
-        world = "world";
         spawnLocation = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
         cageFirstPoint = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
         cageSecondPoint = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
