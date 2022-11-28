@@ -93,7 +93,7 @@ public class CageCommand implements CommandExecutor, Listener {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.setMaxHealth(20);
-        killer.setHealth(20);
+        player.setHealth(20);
         player.setFoodLevel(20);
         ItemStack[] armorItemStack = (ItemStack[]) armorList.toArray((Object[]) new ItemStack[0]);
         player.getInventory().setArmorContents(armorItemStack);
