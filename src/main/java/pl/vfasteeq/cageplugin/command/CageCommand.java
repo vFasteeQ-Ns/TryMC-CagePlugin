@@ -109,7 +109,9 @@ public class CageCommand implements CommandExecutor, Listener {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
         if(event.getEntity().getKiller() != null) {
-            if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
+            if(event.getEntity().getKiller() == attacker && event.getEntity().getKiller() == defender) {
+                Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracze walczący zabili się nawjazjem - remis."));
+            } else if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
                 killer = event.getEntity().getKiller();
                 User user = CoreAPI.getPlugin().getUserManager().getUser(killer.getUniqueId()).getOrNull();
