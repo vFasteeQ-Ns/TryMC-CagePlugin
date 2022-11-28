@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -111,8 +112,10 @@ public class CageCommand implements CommandExecutor, Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         if(event.getEntity().getKiller() != null) {
             if(event.getEntity().getKiller() == attacker && event.getEntity().getKiller() == defender) {
+                event.getEntity().getInventory().clear();
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fNikt nie wygrał klatki, nastąpił remis."));
             } else if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
+                event.getEntity().getInventory().clear();
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
                 killer = event.getEntity().getKiller();
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
@@ -224,6 +227,16 @@ public class CageCommand implements CommandExecutor, Listener {
             event.setCancelled(true);
         }
         if(event.getEntity()==defender && running) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if(event.getPlayer()==attacker && running) {
+            event.setCancelled(true);
+        }
+        if(event.getPlayer()==defender && running) {
             event.setCancelled(true);
         }
     }
