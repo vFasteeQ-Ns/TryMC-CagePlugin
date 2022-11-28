@@ -41,9 +41,8 @@ public class CageCommand implements CommandExecutor, Listener {
     public int time;
     public int taskId;
     private boolean started;
-    private boolean running;
+    private boolean running = false;
     Set<Player> playerHashSet = new HashSet<>();
-    World world = Bukkit.getWorld(ConfigManager.world);
     Player attacker;
     Player defender;
     Player killer;
@@ -193,7 +192,11 @@ public class CageCommand implements CommandExecutor, Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if(event.getPlayer() == attacker || event.getPlayer() == defender && running || !event.getPlayer().isOp()) {
+        if(event.getPlayer()==attacker && running) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz uzywać komend podczas klatki."));
+        }
+        if(event.getPlayer()==defender && running) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz uzywać komend podczas klatki."));
         }
@@ -201,15 +204,21 @@ public class CageCommand implements CommandExecutor, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(final PlayerMoveEvent event) {
-        if (event.getPlayer() == attacker || event.getPlayer() == defender && running) {
+        if(event.getPlayer()==attacker && running) {
+            event.setCancelled(true);
+        }
+        if(event.getPlayer()==defender && running) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
-        if (event.getEntity() == attacker || event.getEntity() == defender && running) {
-            event.setFoodLevel(20);
+        if(event.getEntity()==attacker && running) {
+            event.setCancelled(true);
+        }
+        if(event.getEntity()==defender && running) {
+            event.setCancelled(true);
         }
     }
 }

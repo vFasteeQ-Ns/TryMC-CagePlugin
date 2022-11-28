@@ -17,17 +17,18 @@ public class CagePlaceCommand implements CommandExecutor {
         this.mcPlugin.getCommand("acage").setExecutor(this);
     }
 
-    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player && (commandSender.hasPermission("cageplugin.place") || commandSender.isOp()))) {
             commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fNie możesz użyć tej komendy."));
             return false;
         }
         Player player = (Player)commandSender;
-        if (args.length < 1) {
+        if (args.length != 1) {
             commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &f/acage <spawn, place1, place2>"));
             return false;
         }
-        switch (args[1].toLowerCase()) {
+        switch (args[0].toLowerCase()) {
             case "spawn":
                 ConfigManager.spawnLocation = LocationUtil.locationToString(player.getLocation());
                 mcPlugin.getConfigManager().save();
@@ -44,7 +45,6 @@ public class CagePlaceCommand implements CommandExecutor {
                 commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &fUstawiono drugie miejsce klatek."));
                 return true;
         }
-        commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &f/acage <spawn, place1, place2>"));
         return true;
     }
 }

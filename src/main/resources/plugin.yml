@@ -5,5 +5,7 @@ website: completionStudio.pl
 main: pl.vfasteeq.cageplugin.MCPlugin
 
 commands:
+  acage:
+    description: Admin options for a cage plugin...
   cage:
     description: Start a cage with two players...
