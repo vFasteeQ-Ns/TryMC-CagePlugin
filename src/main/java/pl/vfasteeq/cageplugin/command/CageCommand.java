@@ -92,7 +92,8 @@ public class CageCommand implements CommandExecutor, Listener {
         player.getActivePotionEffects().clear();
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
-        player.setHealth(20);
+        player.resetMaxHealth();
+        killer.setHealth(player.getMaxHealth());
         player.setFoodLevel(20);
         ItemStack[] armorItemStack = (ItemStack[]) armorList.toArray((Object[]) new ItemStack[0]);
         player.getInventory().setArmorContents(armorItemStack);
@@ -110,7 +111,7 @@ public class CageCommand implements CommandExecutor, Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         if(event.getEntity().getKiller() != null) {
             if(event.getEntity().getKiller() == attacker && event.getEntity().getKiller() == defender) {
-                Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracze walczący zabili się nawjazjem - remis."));
+                Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fNikt nie wygrał klatki, nastąpił remis."));
             } else if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
                 killer = event.getEntity().getKiller();
@@ -118,6 +119,7 @@ public class CageCommand implements CommandExecutor, Listener {
                     if(killer.isOnline()) {
                         User user = CoreAPI.getPlugin().getUserManager().getUser(killer.getUniqueId()).getOrNull();
                         CoreAPI.getPlugin().getFightManager().removeFight(user);
+                        killer.setHealth(killer.getMaxHealth());
                         killer.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
                         killer.getInventory().clear();
                         killer.getInventory().setArmorContents(null);
