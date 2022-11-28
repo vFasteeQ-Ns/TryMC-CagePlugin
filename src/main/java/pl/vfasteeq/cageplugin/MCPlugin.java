@@ -3,7 +3,7 @@ package pl.vfasteeq.cageplugin;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.vfasteeq.cageplugin.config.ConfigManager;
-import pl.vfasteeq.cageplugin.handler.CageHandler;
+import pl.vfasteeq.cageplugin.command.CageCommand;
 
 /**
  * @author vFasteeQ
@@ -23,7 +23,7 @@ public class MCPlugin extends JavaPlugin {
     }
 
     private void registerListener() {
-        new CageHandler(this);
+        new CageCommand(this);
     }
 
     private void initConfiguration(){

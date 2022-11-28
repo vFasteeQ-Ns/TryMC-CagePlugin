@@ -62,5 +62,12 @@
             <scope>system</scope>
             <systemPath>E:/IdeaLibs/Bukkit.jar</systemPath>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.vavr/vavr-match-processor -->
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr-match-processor</artifactId>
+            <version>0.10.4</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -1,7 +1,10 @@
 package pl.vfasteeq.cageplugin.config;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import pl.vfasteeq.cageplugin.MCPlugin;
+import pl.vfasteeq.cageplugin.util.LocationUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -24,9 +27,12 @@ public class ConfigManager {
     }
 
     public static String world;
-    public static List<Integer> coordinatesAttacker = new ArrayList<>();
-    public static List<Integer> coordinatesDefender = new ArrayList<>();
-    public static List<Integer> coordinatesSpawn = new ArrayList<>();
+
+    public static String spawnLocation;
+
+    public static String cageFirstPoint;
+
+    public static String cageSecondPoint;
 
     public void load(){
         try{
@@ -68,8 +74,8 @@ public class ConfigManager {
 
     private void setValues(){
         world = "world";
-        coordinatesAttacker = Arrays.asList(-10,95,0);
-        coordinatesDefender = Arrays.asList(10,95,0);
-        coordinatesSpawn = Arrays.asList(0,95,0);
+        spawnLocation = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
+        cageFirstPoint = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
+        cageSecondPoint = LocationUtil.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation());
     }
 }

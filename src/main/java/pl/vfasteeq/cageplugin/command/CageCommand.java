@@ -1,4 +1,4 @@
-package pl.vfasteeq.cageplugin.handler;
+package pl.vfasteeq.cageplugin.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,6 +23,7 @@ import pl.vfasteeq.cageplugin.MCPlugin;
 import pl.vfasteeq.cageplugin.MCPluginAPI;
 import pl.vfasteeq.cageplugin.config.ConfigManager;
 import pl.vfasteeq.cageplugin.util.ChatUtil;
+import pl.vfasteeq.cageplugin.util.LocationUtil;
 import pl.vfasteeq.cageplugin.util.TitleUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ import java.util.Set;
  * @since 24.11.2022
  */
 
-public class CageHandler implements CommandExecutor, Listener {
+public class CageCommand implements CommandExecutor, Listener {
     private final MCPlugin mcPlugin;
     private final List<ItemStack> armorList = new ArrayList<>();
     private final List<ItemStack> otherList = new ArrayList<>();
@@ -48,7 +49,7 @@ public class CageHandler implements CommandExecutor, Listener {
     Player defender;
     Player killer;
 
-    public CageHandler(MCPlugin mcPlugin) {
+    public CageCommand(MCPlugin mcPlugin) {
         this.mcPlugin = mcPlugin;
         armorList.add(new ItemStack(Material.IRON_BOOTS, 1));
         armorList.add(new ItemStack(Material.IRON_LEGGINGS, 1));
@@ -100,9 +101,9 @@ public class CageHandler implements CommandExecutor, Listener {
         ItemStack[] otherItemStack = (ItemStack[]) otherList.toArray((Object[]) new ItemStack[0]);
         player.getInventory().setContents(otherItemStack);
         if (attacker) {
-            player.teleport(new Location(world, ConfigManager.coordinatesAttacker.get(0), ConfigManager.coordinatesAttacker.get(1), ConfigManager.coordinatesAttacker.get(2)));
+            player.teleport(LocationUtil.locationFromString(ConfigManager.cageFirstPoint));
         } else {
-            player.teleport(new Location(world, ConfigManager.coordinatesDefender.get(0), ConfigManager.coordinatesDefender.get(1), ConfigManager.coordinatesDefender.get(2)));
+            player.teleport(LocationUtil.locationFromString(ConfigManager.cageSecondPoint));
         }
 
     }
@@ -115,7 +116,7 @@ public class CageHandler implements CommandExecutor, Listener {
                 killer = event.getEntity().getKiller();
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
                     if(killer.isOnline()) {
-                        killer.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
+                        killer.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
                         killer.getInventory().clear();
                         killer.getInventory().setArmorContents(null);
                         attacker = null;
@@ -156,13 +157,13 @@ public class CageHandler implements CommandExecutor, Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if(event.getPlayer() == attacker) {
-            event.getPlayer().teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
+            event.getPlayer().teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
             event.getPlayer().getInventory().clear();
             event.getPlayer().getInventory().setArmorContents(null);
-            defender.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
+            defender.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
             defender.getInventory().clear();
             defender.getInventory().setArmorContents(null);
-            User user = CoreAPI.getPlugin().getUserManager().getUser(defender);
+            User user = CoreAPI.getPlugin().getUserManager().getUser(defender.getUniqueId()).getOrNull();
             CoreAPI.getPlugin().getFightManager().removeFight(user);
             Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke walkowerem wygrał gracz&8: &e" + defender.getName()));
             attacker = null;
@@ -173,13 +174,13 @@ public class CageHandler implements CommandExecutor, Listener {
             }
         }
         if(event.getPlayer() == defender) {
-            event.getPlayer().teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
+            event.getPlayer().teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
             event.getPlayer().getInventory().clear();
             event.getPlayer().getInventory().setArmorContents(null);
-            attacker.teleport(new Location(world, ConfigManager.coordinatesSpawn.get(0), ConfigManager.coordinatesSpawn.get(1), ConfigManager.coordinatesSpawn.get(2)));
+            attacker.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
             attacker.getInventory().clear();
             attacker.getInventory().setArmorContents(null);
-            User user = CoreAPI.getPlugin().getUserManager().getUser(attacker);
+            User user = CoreAPI.getPlugin().getUserManager().getUser(attacker.getUniqueId()).getOrNull();
             CoreAPI.getPlugin().getFightManager().removeFight(user);
             Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke walkowerem wygrał gracz&8: &e" + attacker.getName()));
             attacker = null;
