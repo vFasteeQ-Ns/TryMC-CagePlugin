@@ -25,10 +25,8 @@ import pl.vfasteeq.cageplugin.config.ConfigManager;
 import pl.vfasteeq.cageplugin.util.ChatUtil;
 import pl.vfasteeq.cageplugin.util.LocationUtil;
 import pl.vfasteeq.cageplugin.util.TitleUtil;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * @author vFasteeQ
@@ -112,11 +110,11 @@ public class CageCommand implements CommandExecutor, Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         if(event.getEntity().getKiller() != null) {
             if(event.getEntity().getKiller() == attacker && event.getEntity().getKiller() == defender) {
-                event.getEntity().getInventory().clear();
+                event.getDrops().clear();
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fNikt nie wygrał klatki, nastąpił remis."));
             } else if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
-                event.getEntity().getInventory().clear();
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
+                event.getDrops().clear();
                 killer = event.getEntity().getKiller();
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
                     if(killer.isOnline()) {
