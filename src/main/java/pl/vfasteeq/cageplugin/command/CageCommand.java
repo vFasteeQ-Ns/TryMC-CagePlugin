@@ -93,7 +93,7 @@ public class CageCommand implements CommandExecutor, Listener {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.setMaxHealth(20);
-        killer.setHealth(player.getMaxHealth());
+        killer.setHealth(20);
         player.setFoodLevel(20);
         ItemStack[] armorItemStack = (ItemStack[]) armorList.toArray((Object[]) new ItemStack[0]);
         player.getInventory().setArmorContents(armorItemStack);
@@ -119,7 +119,7 @@ public class CageCommand implements CommandExecutor, Listener {
                     if(killer.isOnline()) {
                         User user = CoreAPI.getPlugin().getUserManager().getUser(killer.getUniqueId()).getOrNull();
                         CoreAPI.getPlugin().getFightManager().removeFight(user);
-                        killer.setHealth(killer.getMaxHealth());
+                        killer.setHealth(20);
                         killer.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
                         killer.getInventory().clear();
                         killer.getInventory().setArmorContents(null);
