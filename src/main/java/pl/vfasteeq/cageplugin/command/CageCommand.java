@@ -84,7 +84,7 @@ public class CageCommand implements CommandExecutor, Listener {
         startCage(attacker, defender);
         setupPlayer(attacker, true);
         setupPlayer(defender, false);
-        Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz&8: &e" + attacker.getName() + " &f walczy z graczem&8: &e" + defender.getName()));
+        Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fGracz&8: &e" + attacker.getName() + "&f walczy z graczem&8: &e" + defender.getName()));
         return true;
     }
 
