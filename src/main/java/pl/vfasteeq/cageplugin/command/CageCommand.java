@@ -112,6 +112,8 @@ public class CageCommand implements CommandExecutor, Listener {
             if(event.getEntity().getKiller() == attacker || event.getEntity().getKiller() == defender) {
                 Bukkit.broadcastMessage(ChatUtil.fixColor("&4CAGE &8>> &fKlatke wygrał gracz&8: &e" + event.getEntity().getKiller().getName()));
                 killer = event.getEntity().getKiller();
+                User user = CoreAPI.getPlugin().getUserManager().getUser(killer.getUniqueId()).getOrNull();
+                CoreAPI.getPlugin().getFightManager().removeFight(user);
                 Bukkit.getScheduler().runTaskLater(mcPlugin, () -> {
                     if(killer.isOnline()) {
                         killer.teleport(LocationUtil.locationFromString(ConfigManager.spawnLocation));
@@ -204,11 +206,11 @@ public class CageCommand implements CommandExecutor, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(final PlayerMoveEvent event) {
-        if(event.getPlayer()==attacker && running) {
-            event.setCancelled(true);
+        if(event.getPlayer()==attacker && running && started) {
+            event.getPlayer().teleport(event.getPlayer().getLocation());
         }
-        if(event.getPlayer()==defender && running) {
-            event.setCancelled(true);
+        if(event.getPlayer()==defender && running && started) {
+            event.getPlayer().teleport(event.getPlayer().getLocation());
         }
     }
 
