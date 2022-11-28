@@ -24,7 +24,7 @@ public class CagePlaceCommand implements CommandExecutor {
         }
         Player player = (Player)commandSender;
         if (args.length < 1) {
-            commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &f/aklatki <spawn, place1, place2>"));
+            commandSender.sendMessage(ChatUtil.fixColor("&4CAGE &8>> &f/acage <spawn, place1, place2>"));
             return true;
         }
         switch (args[1].toLowerCase()) {
